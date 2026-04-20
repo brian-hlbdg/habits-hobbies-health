@@ -1,0 +1,28 @@
+{
+  "name": "habits-hobbies-health",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/brian-hlbdg/habits-hobbies-health/issues"
+  },
+  "homepage": "https://github.com/brian-hlbdg/habits-hobbies-health#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.104.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-router-dom": "^7.14.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "@vitejs/plugin-react": "^6.0.1",
+    "tailwindcss": "^4.2.2",
+    "vite": "^8.0.9"
+  }
+}
