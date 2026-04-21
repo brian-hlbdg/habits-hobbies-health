@@ -26,7 +26,10 @@ export default function Auth() {
       // Existing user
       setIsNew(false)
       setSent(true)
-    } else if (signInErr.message?.toLowerCase().includes('not found') || signInErr.status === 400) {
+    } else if (signInErr.message?.toLowerCase().includes('rate limit')) {
+      // Rate limited — don't send a second request
+      setError('Too many emails sent. Please wait a few minutes and try again.')
+    } else if (signInErr.message?.toLowerCase().includes('not found') || signInErr.message?.toLowerCase().includes('not registered')) {
       // New user — create account and send link
       const { error: signUpErr } = await supabase.auth.signInWithOtp({
         email,
