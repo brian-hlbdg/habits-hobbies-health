@@ -59,26 +59,91 @@ The weekly review (habit bars + completed tasks) proved useful. Apply the same p
 
 ---
 
-## State & Performance
+## Architecture Fixes
 
-From the architecture evaluation:
+These are known issues identified during a full codebase evaluation. Each entry includes the file, the problem, and the fix required.
 
-- [ ] Fix `useHabitCelebrations` running once on mount — milestones hit mid-session don't show on Today until reload
-- [ ] QuickCapture adding a task doesn't refresh the Today list in the same session
-- [ ] `useDashboard` goes stale as you complete tasks — no reactivity
-- [ ] Batch `useHabitHistory` queries (currently one query per habit on the Habits page)
-- [ ] Fix `useDashboard` fetching completions twice
-- [ ] Add error handling to QuickCapture — currently closes modal silently on failure
+---
+
+### 1. `useHabitCelebrations` is stale after first load
+
+**File:** `src/hooks/useHabitCelebrations.js`  
+**Problem:** The hook uses `useEffect` with an empty dependency array `[]`, so it only runs once when the Today page mounts. If a user completes a habit during the session and that completion crosses a milestone (e.g. hits day 7), the celebration banner on the Today screen will not appear until the user reloads the page.  
+**Fix:** The hook needs to re-run when habit completions change. The cleanest solution is to accept a `completedHabitIds` prop or dependency from `useHabits` so it re-fires when the completion list changes. Alternatively, migrate to TanStack Query with a shared query key so all habit-related queries invalidate together.
+
+---
+
+### 2. QuickCapture does not refresh the Today task list
+
+**File:** `src/components/ui/QuickCaptureModal.jsx` and `src/hooks/useItems.js`  
+**Problem:** When a task is added via QuickCapture, it inserts directly into the `items` table via Supabase. The `useItems('daily')` hook in `Today.jsx` has its own isolated state. These two are not connected — the Today list will not show the new task until the user navigates away and back, or manually refreshes.  
+**Fix:** Two options:
+- (Simple) Export a `reload` function from `useItems` and pass it as a callback to QuickCaptureModal via context or prop drilling through AppLayout.
+- (Better) Lift item state up or use TanStack Query with a shared `['items', 'daily']` query key, so QuickCapture can call `queryClient.invalidateQueries(['items', 'daily'])` after insert.
+
+---
+
+### 3. `useDashboard` goes stale throughout the session
+
+**File:** `src/hooks/useDashboard.js`  
+**Problem:** Dashboard summary cards (work tasks, home tasks, overdue counts) fetch once on mount and never update. As the user completes tasks on Today/Weekly/etc., the dashboard numbers fall out of sync without a page reload.  
+**Fix:** Add a `reload` function to `useDashboard` and call it when the Dashboard component becomes visible (using a `visibilitychange` listener or a focus-based `useEffect`). Or — better long-term — use TanStack Query so completing a task invalidates the dashboard query automatically.
+
+---
+
+### 4. `useDashboard` fetches completions twice
+
+**File:** `src/hooks/useDashboard.js`  
+**Problem:** The hook runs two separate Supabase queries for completions — one when processing work/home task counts, and a second when processing project tasks. This is two round-trips for data that could be fetched in one query.  
+**Fix:** Fetch all completions for today's date in a single query at the top of the `load` function, then reuse that result for both task and project calculations. The query is: `completions` where `log_date = today()` and `item_id IN [all item ids]`.
+
+---
+
+### 5. N+1 queries on the Habits page (`useHabitHistory`)
+
+**File:** `src/hooks/useHabitHistory.js` and `src/components/habits/HabitHeatmap.jsx`  
+**Problem:** Every `HabitHeatmap` component independently calls `useHabitHistory(habitId)`, which fires one Supabase query per habit. With 10 habits on screen, that is 10 concurrent queries to the `completions` table fetching 84 days of data each. Works fine now at small scale, will degrade as habit count grows.  
+**Fix:** Create a `useAllHabitHistories(habitIds)` parent hook that fetches completions for ALL habits in a single query (`item_id IN [all ids]`), then slices the result per habit and passes it down as props to each `HabitHeatmap`. `HabitHeatmap` would accept pre-computed `grid`, `streak`, `bestStreak`, `milestones` props instead of calling `useHabitHistory` itself.
+
+---
+
+### 6. QuickCapture closes silently on Supabase failure
+
+**File:** `src/components/ui/QuickCaptureModal.jsx`, `handleSubmit` function  
+**Problem:** The Supabase insert calls (`supabase.from(...).insert(...)`) are awaited but the `error` return value is never checked. If the insert fails (network error, RLS violation, schema mismatch), the modal closes and the user has no indication their data was not saved.  
+**Fix:** Destructure `{ error }` from each insert call. If error is truthy, set a local `errorMsg` state and display it inside the modal instead of calling `onClose()`. Example:
+```js
+const { error } = await supabase.from('items').insert({ ... })
+if (error) { setError('Could not save. Try again.'); setSaving(false); return }
+onClose()
+```
+
+---
+
+### 7. Stale state when promoting ideas to tasks/habits
+
+**File:** `src/hooks/useIdeas.js` — `promoteToTask`, `promoteToHabit`  
+**Problem:** Both promote functions insert a new row into `items` and delete the idea. The idea is removed from `useIdeas` state correctly, but the new item does not appear in `useItems` or `useHabits` state until the user navigates to that page. A user who promotes an idea to a task and goes straight to Today will not see it.  
+**Fix:** Same as item 2 — either export `reload` from the destination hook and call it after promotion, or use TanStack Query invalidation.
+
+---
+
+### 8. Missing error boundary — uncaught hook errors crash the page
+
+**File:** `src/App.jsx`  
+**Problem:** There is no React error boundary wrapping the app or individual pages. If any hook throws an unhandled exception (Supabase network error, malformed response, etc.), the entire page goes blank with no recovery path for the user.  
+**Fix:** Add a simple error boundary component in `src/components/ErrorBoundary.jsx` and wrap `AppLayout` with it in `App.jsx`. The boundary should catch render errors and show a "Something went wrong — tap to reload" fallback instead of a blank screen.
 
 ---
 
 ## Dead Code Cleanup
 
-Left over from refactoring:
+Left over from the FAB refactor and earlier iterations. These are safe to delete:
 
-- [ ] Remove unused `addItem` destructure in `Monthly.jsx` and `Yearly.jsx`
-- [ ] Remove unused `StarIcon` in `NavBar.jsx`
-- [ ] Audit `CaptureIdeaModal.jsx` — exists but imported nowhere
+- [ ] `Monthly.jsx` — `addItem` is destructured from `useItems()` on line 15 but never used. Remove it from the destructure.
+- [ ] `Yearly.jsx` — same issue, `addItem` destructured but unused.
+- [ ] `NavBar.jsx` — `StarIcon` SVG component is defined but never referenced in the nav links array or rendered anywhere.
+- [ ] `src/components/ui/CaptureIdeaModal.jsx` — file exists but is not imported or used anywhere in the app. Likely superseded by `QuickCaptureModal`. Confirm it is unused then delete.
 
 ---
 
