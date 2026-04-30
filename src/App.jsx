@@ -6,6 +6,7 @@ import Today from './pages/Today'
 import Weekly from './pages/Weekly'
 import Monthly from './pages/Monthly'
 import Yearly from './pages/Yearly'
+import Ideas from './pages/Ideas'
 import NavBar from './components/layout/NavBar'
 
 export default function App() {
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/weekly"  element={<Weekly />} />
             <Route path="/monthly" element={<Monthly />} />
             <Route path="/yearly"  element={<Yearly />} />
+            <Route path="/ideas"   element={<Ideas />} />
             <Route path="*"        element={<Navigate to="/" replace />} />
           </Routes>
         </main>

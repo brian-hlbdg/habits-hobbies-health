@@ -81,9 +81,17 @@ function ContextCard({ label, Icon, data, color, bg, iconColor, active, onClick 
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{label}</p>
         </div>
         <p className="text-sm font-bold text-gray-900 mt-0.5">{completed}/{total} done</p>
-        {overdue > 0 && (
-          <p className="text-xs text-red-500 font-medium">{overdue} overdue</p>
-        )}
+        <div className="flex gap-2 mt-0.5">
+          {overdue > 0 && (
+            <p className="text-xs text-red-500 font-medium">{overdue} overdue</p>
+          )}
+          {data.ideas > 0 && (
+            <p className="text-xs text-indigo-400 font-medium">{data.ideas} ideas</p>
+          )}
+          {data.projects > 0 && (
+            <p className="text-xs text-emerald-500 font-medium">{data.projects} projects</p>
+          )}
+        </div>
       </div>
     </button>
   )

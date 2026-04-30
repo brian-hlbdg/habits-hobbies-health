@@ -6,6 +6,7 @@ const links = [
   { to: '/weekly',  label: 'Week',    icon: CalIcon },
   { to: '/monthly', label: 'Month',   icon: GridIcon },
   { to: '/yearly',  label: 'Year',    icon: StarIcon },
+  { to: '/ideas',   label: 'Ideas',   icon: LightbulbIcon },
 ]
 
 function navClass({ isActive }) {
@@ -101,6 +102,15 @@ function StarIcon({ className }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </svg>
+  )
+}
+
+function LightbulbIcon({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 18h6M10 22h4" />
+      <path d="M12 2a7 7 0 0 1 7 7c0 2.6-1.4 4.9-3.5 6.2L15 17H9l-.5-1.8A7 7 0 0 1 12 2z" />
     </svg>
   )
 }
