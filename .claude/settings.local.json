@@ -6,7 +6,26 @@
       "Bash(npm install:*)",
       "Bash(npm run:*)",
       "Bash(kill %1)",
-      "Bash(wait)"
+      "Bash(wait)",
+      "Bash(git -C /Users/hlbdg/habits-hobbies-health status)",
+      "Bash(git -C /Users/hlbdg/habits-hobbies-health log --oneline -3)",
+      "Bash(git -C /Users/hlbdg/habits-hobbies-health status --short)",
+      "Bash(git -C /Users/hlbdg/habits-hobbies-health ls-files --others --exclude-standard)",
+      "Bash(git -C /Users/hlbdg/habits-hobbies-health ls-files --others)",
+      "Bash(git -C /Users/hlbdg/habits-hobbies-health ls-files)",
+      "Bash(git -C /Users/hlbdg/habits-hobbies-health log --oneline)",
+      "Bash(git -C /Users/hlbdg/habits-hobbies-health show --stat HEAD)",
+      "Bash(git -C /Users/hlbdg/habits-hobbies-health diff HEAD src/)",
+      "Bash(git:*)",
+      "Bash(ls -lt ~/.claude/projects/-Users-hlbdg-habits-hobbies-health/*.jsonl)",
+      "Bash(python3 -c \" import sys, json lines = sys.stdin.readlines\\(\\) for line in lines: try: obj = json.loads\\(line\\) role = obj.get\\('type',''\\) if obj.get\\('type'\\) == 'user': msg = obj.get\\('message', {}\\) content = msg.get\\('content', ''\\) if isinstance\\(content, list\\): for c in content: if isinstance\\(c, dict\\) and c.get\\('type'\\) == 'text': print\\(f'USER: {c[\\\\\"text\\\\\"]}'\\) elif isinstance\\(content, str\\): print\\(f'USER: {content}'\\) elif obj.get\\('type'\\) == 'assistant': msg = obj.get\\('message', {}\\) content = msg.get\\('content', []\\) if isinstance\\(content, list\\): for c in content: if isinstance\\(c, dict\\) and c.get\\('type'\\) == 'text': print\\(f'ASSISTANT: {c[\\\\\"text\\\\\"]}'\\) except: pass \")",
+      "Read(//Users/hlbdg/.claude/**)",
+      "Read(//Users/hlbdg/.config/claude/**)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('mcpServers',{}\\), indent=2\\)\\)\")",
+      "WebFetch(domain:github.com)",
+      "Bash(claude mcp:*)",
+      "mcp__supabase__list_projects",
+      "mcp__supabase__execute_sql"
     ]
   }
 }
