@@ -20,29 +20,24 @@ function HomeIcon({ className }) {
 }
 
 const CATEGORIES = [
-  { value: 'work',      label: 'Work' },
   { value: 'todo',      label: 'To Do' },
-  { value: 'website',   label: 'Website' },
-  { value: 'daily',     label: 'Daily' },
-  { value: 'weekly',    label: 'Weekly' },
+  { value: 'work',      label: 'Work' },
   { value: 'bills',     label: 'Bills' },
-  { value: 'next_week', label: 'Next Week' },
+  { value: 'website',   label: 'Website' },
   { value: 'personal',  label: 'Personal' },
-  { value: 'monthly',   label: 'Monthly' },
   { value: 'groceries', label: 'Groceries' },
   { value: 'story',     label: 'Story — Eternal Echoes' },
 ]
 
 const CONTEXT_DEFAULT = {
-  work: 'work', todo: 'work', website: 'work', bills: 'work',
+  work: 'work', website: 'work', bills: 'work',
 }
 
 export default function AddItemModal({ view, onAdd, onClose }) {
-  const [title, setTitle]             = useState('')
-  const [category, setCategory]       = useState('daily')
-  const [context, setContext]         = useState('home')
-  const [isRecurring, setIsRecurring] = useState(true)
-  const [dueDate, setDueDate]         = useState('')
+  const [title, setTitle]       = useState('')
+  const [category, setCategory] = useState('todo')
+  const [context, setContext]   = useState('home')
+  const [dueDate, setDueDate]   = useState('')
 
   function handleCategoryChange(val) {
     setCategory(val)
@@ -56,8 +51,8 @@ export default function AddItemModal({ view, onAdd, onClose }) {
       title: title.trim(),
       category,
       context,
-      is_recurring: isRecurring,
-      due_date: isRecurring ? null : (dueDate || null),
+      is_recurring: false,
+      due_date: dueDate || null,
     })
     onClose()
   }
@@ -65,9 +60,12 @@ export default function AddItemModal({ view, onAdd, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center">
       <div className="absolute inset-0 bg-black/30 dark:bg-black/50" onClick={onClose} />
-      <div className="relative w-full max-w-lg bg-white dark:bg-zinc-900 rounded-t-2xl md:rounded-2xl p-5 slide-up shadow-xl dark:shadow-zinc-950">
+      <div className="relative w-full max-w-lg bg-white dark:bg-zinc-900 rounded-t-2xl md:rounded-2xl p-5 slide-up shadow-xl">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-800 dark:text-zinc-100">Add item</h3>
+          <div>
+            <h3 className="font-semibold text-gray-800 dark:text-zinc-100">Add task</h3>
+            <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">For recurring habits, use the Habits page</p>
+          </div>
           <button onClick={onClose} className="text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300">
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
@@ -76,16 +74,14 @@ export default function AddItemModal({ view, onAdd, onClose }) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-3">
-          <div>
-            <input
-              autoFocus
-              type="text"
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-              placeholder="What do you want to track?"
-              className="w-full rounded-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-500 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
-            />
-          </div>
+          <input
+            autoFocus
+            type="text"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            placeholder="What needs to get done?"
+            className="w-full rounded-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 dark:text-white dark:placeholder-zinc-500 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+          />
 
           <div>
             <label className="block text-xs font-medium text-gray-500 dark:text-zinc-400 mb-1">Category</label>
@@ -112,7 +108,9 @@ export default function AddItemModal({ view, onAdd, onClose }) {
                   type="button"
                   onClick={() => setContext(value)}
                   className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium border transition ${
-                    context === value ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 border-gray-200 dark:border-zinc-700 hover:border-indigo-300'
+                    context === value
+                      ? 'bg-indigo-600 text-white border-indigo-600'
+                      : 'bg-white dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 border-gray-200 dark:border-zinc-700 hover:border-indigo-300'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" /> {label}
@@ -121,45 +119,22 @@ export default function AddItemModal({ view, onAdd, onClose }) {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setIsRecurring(true)}
-              className={`flex-1 py-2 rounded-lg text-sm font-medium border transition ${
-                isRecurring ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 border-gray-200 dark:border-zinc-700 hover:border-indigo-300'
-              }`}
-            >
-              Recurring habit
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsRecurring(false)}
-              className={`flex-1 py-2 rounded-lg text-sm font-medium border transition ${
-                !isRecurring ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 border-gray-200 dark:border-zinc-700 hover:border-indigo-300'
-              }`}
-            >
-              Planned task
-            </button>
+          <div>
+            <label className="block text-xs font-medium text-gray-500 dark:text-zinc-400 mb-1">Due date <span className="text-gray-300 dark:text-zinc-600">(optional)</span></label>
+            <input
+              type="date"
+              value={dueDate}
+              onChange={e => setDueDate(e.target.value)}
+              className="w-full rounded-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 dark:text-white px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            />
           </div>
-
-          {!isRecurring && (
-            <div>
-              <label className="block text-xs font-medium text-gray-500 dark:text-zinc-400 mb-1">Due date (optional)</label>
-              <input
-                type="date"
-                value={dueDate}
-                onChange={e => setDueDate(e.target.value)}
-                className="w-full rounded-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 dark:text-white px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
-              />
-            </div>
-          )}
 
           <button
             type="submit"
             disabled={!title.trim()}
             className="w-full rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-40 transition"
           >
-            Add
+            Add task
           </button>
         </form>
       </div>
