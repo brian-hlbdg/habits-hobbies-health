@@ -93,13 +93,14 @@ export function useItems(view, date = today()) {
   }
 
   /** Add a new item */
-  async function addItem({ title, category, frequency, is_recurring, due_date }) {
+  async function addItem({ title, category, context, frequency, is_recurring, due_date }) {
     const { data: { user } } = await supabase.auth.getUser()
     const maxOrder = items.reduce((m, i) => Math.max(m, i.order_index), -1)
     const { data, error } = await supabase.from('items').insert({
       user_id: user.id,
       title,
       category,
+      context: context || 'home',
       view,
       frequency: frequency || (view === 'daily' ? 'daily' : view),
       is_recurring: is_recurring ?? true,

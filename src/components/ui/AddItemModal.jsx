@@ -14,11 +14,21 @@ const CATEGORIES = [
   { value: 'story',     label: 'Story — Eternal Echoes' },
 ]
 
+const CONTEXT_DEFAULT = {
+  work: 'work', todo: 'work', website: 'work', bills: 'work',
+}
+
 export default function AddItemModal({ view, onAdd, onClose }) {
-  const [title, setTitle]           = useState('')
-  const [category, setCategory]     = useState('daily')
+  const [title, setTitle]             = useState('')
+  const [category, setCategory]       = useState('daily')
+  const [context, setContext]         = useState('home')
   const [isRecurring, setIsRecurring] = useState(true)
-  const [dueDate, setDueDate]       = useState('')
+  const [dueDate, setDueDate]         = useState('')
+
+  function handleCategoryChange(val) {
+    setCategory(val)
+    setContext(CONTEXT_DEFAULT[val] ?? 'home')
+  }
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -26,6 +36,7 @@ export default function AddItemModal({ view, onAdd, onClose }) {
     onAdd({
       title: title.trim(),
       category,
+      context,
       is_recurring: isRecurring,
       due_date: isRecurring ? null : (dueDate || null),
     })
@@ -61,13 +72,31 @@ export default function AddItemModal({ view, onAdd, onClose }) {
             <label className="block text-xs font-medium text-gray-500 mb-1">Category</label>
             <select
               value={category}
-              onChange={e => setCategory(e.target.value)}
+              onChange={e => handleCategoryChange(e.target.value)}
               className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 bg-white"
             >
               {CATEGORIES.map(c => (
                 <option key={c.value} value={c.value}>{c.label}</option>
               ))}
             </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-500 mb-1">Context</label>
+            <div className="flex gap-2">
+              {['work', 'home'].map(ctx => (
+                <button
+                  key={ctx}
+                  type="button"
+                  onClick={() => setContext(ctx)}
+                  className={`flex-1 py-2 rounded-lg text-sm font-medium border transition capitalize ${
+                    context === ctx ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
+                  }`}
+                >
+                  {ctx === 'work' ? '💼 Work' : '🏠 Home'}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
