@@ -3,7 +3,8 @@ import { supabase } from '../../lib/supabase'
 
 const links = [
   { to: '/',        label: 'Today',   icon: SunIcon },
-  { to: '/weekly',  label: 'Tasks',   icon: CalIcon },
+  { to: '/weekly',  label: 'Week',    icon: CalIcon },
+  { to: '/monthly', label: 'Month',   icon: GridIcon },
   { to: '/habits',  label: 'Habits',  icon: RepeatIcon },
   { to: '/ideas',   label: 'Ideas',   icon: LightbulbIcon },
 ]

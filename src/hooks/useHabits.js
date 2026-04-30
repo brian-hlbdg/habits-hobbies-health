@@ -17,7 +17,7 @@ export function useHabits() {
       .from('items')
       .select('*')
       .eq('user_id', user.id)
-      .eq('is_recurring', true)
+      .eq('type', 'habit')
       .eq('active', true)
       .order('category')
       .order('order_index')
@@ -61,16 +61,18 @@ export function useHabits() {
     }, { onConflict: 'item_id,log_date' })
   }
 
-  async function addHabit({ title, category, context }) {
+  async function addHabit({ title, category, context, frequency }) {
     const { data: { user } } = await supabase.auth.getUser()
     const maxOrder = habits.reduce((m, h) => Math.max(m, h.order_index), -1)
+    const freq = frequency || 'daily'
     const { data, error } = await supabase.from('items').insert({
       user_id: user.id,
       title,
       category: category || 'daily',
       context:  context  || 'home',
-      view: 'daily',
-      frequency: 'daily',
+      type: 'habit',
+      view: freq,          // view matches frequency for habits
+      frequency: freq,
       is_recurring: true,
       order_index: maxOrder + 1,
     }).select().single()

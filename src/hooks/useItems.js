@@ -5,8 +5,7 @@ import { supabase, today } from '../lib/supabase'
  * Fetch all active items for a given view, plus today's completions.
  * Returns items merged with their completion state for `date`.
  */
-// mode: 'tasks' = is_recurring false, 'habits' = is_recurring true, null = all
-export function useItems(view, date = today(), mode = 'tasks') {
+export function useItems(view, date = today()) {
   const [items, setItems]     = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState(null)
@@ -19,18 +18,15 @@ export function useItems(view, date = today(), mode = 'tasks') {
     if (!user) return
 
     // Fetch items for this view
-    let query = supabase
+    // Task views always show type='task' items only
+    const { data: itemRows, error: itemErr } = await supabase
       .from('items')
       .select('*')
       .eq('user_id', user.id)
       .eq('view', view)
+      .eq('type', 'task')
       .eq('active', true)
       .order('order_index')
-
-    if (mode === 'tasks')  query = query.eq('is_recurring', false)
-    if (mode === 'habits') query = query.eq('is_recurring', true)
-
-    const { data: itemRows, error: itemErr } = await query
 
     if (itemErr) { setError(itemErr.message); setLoading(false); return }
 
@@ -107,9 +103,10 @@ export function useItems(view, date = today(), mode = 'tasks') {
       title,
       category,
       context: context || 'home',
+      type: 'task',
       view,
-      frequency: frequency || (view === 'daily' ? 'daily' : view),
-      is_recurring: is_recurring ?? true,
+      frequency: frequency || view,
+      is_recurring: is_recurring ?? false,
       due_date: due_date || null,
       order_index: maxOrder + 1,
     }).select().single()

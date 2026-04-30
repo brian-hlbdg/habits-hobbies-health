@@ -33,11 +33,20 @@ const CONTEXT_DEFAULT = {
   work: 'work', website: 'work', bills: 'work',
 }
 
+// view → default frequency label for recurring tasks
+const FREQ_LABEL = {
+  daily: 'Repeats daily',
+  weekly: 'Repeats weekly',
+  monthly: 'Repeats monthly',
+  yearly: 'Repeats yearly',
+}
+
 export default function AddItemModal({ view, onAdd, onClose }) {
-  const [title, setTitle]       = useState('')
-  const [category, setCategory] = useState('todo')
-  const [context, setContext]   = useState('home')
-  const [dueDate, setDueDate]   = useState('')
+  const [title, setTitle]         = useState('')
+  const [category, setCategory]   = useState('todo')
+  const [context, setContext]     = useState('home')
+  const [dueDate, setDueDate]     = useState('')
+  const [recurring, setRecurring] = useState(false)
 
   function handleCategoryChange(val) {
     setCategory(val)
@@ -48,11 +57,11 @@ export default function AddItemModal({ view, onAdd, onClose }) {
     e.preventDefault()
     if (!title.trim()) return
     onAdd({
-      title: title.trim(),
+      title:        title.trim(),
       category,
       context,
-      is_recurring: false,
-      due_date: dueDate || null,
+      is_recurring: recurring,
+      due_date:     recurring ? null : (dueDate || null),
     })
     onClose()
   }
@@ -64,7 +73,9 @@ export default function AddItemModal({ view, onAdd, onClose }) {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="font-semibold text-gray-800 dark:text-zinc-100">Add task</h3>
-            <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">For recurring habits, use the Habits page</p>
+            <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">
+              To build a behavior over time, use the Habits page
+            </p>
           </div>
           <button onClick={onClose} className="text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300">
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -119,15 +130,37 @@ export default function AddItemModal({ view, onAdd, onClose }) {
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-gray-500 dark:text-zinc-400 mb-1">Due date <span className="text-gray-300 dark:text-zinc-600">(optional)</span></label>
-            <input
-              type="date"
-              value={dueDate}
-              onChange={e => setDueDate(e.target.value)}
-              className="w-full rounded-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 dark:text-white px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
-            />
-          </div>
+          {/* Recurring toggle */}
+          <button
+            type="button"
+            onClick={() => setRecurring(r => !r)}
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg border text-sm transition ${
+              recurring
+                ? 'bg-indigo-50 dark:bg-indigo-950 border-indigo-300 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300'
+                : 'bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-300'
+            }`}
+          >
+            <span className="font-medium">
+              {recurring ? FREQ_LABEL[view] ?? 'Recurring task' : 'One-time task'}
+            </span>
+            <span className="text-xs text-gray-400 dark:text-zinc-500">
+              {recurring ? 'tap to make one-time' : 'tap to make recurring'}
+            </span>
+          </button>
+
+          {!recurring && (
+            <div>
+              <label className="block text-xs font-medium text-gray-500 dark:text-zinc-400 mb-1">
+                Due date <span className="text-gray-300 dark:text-zinc-600">(optional)</span>
+              </label>
+              <input
+                type="date"
+                value={dueDate}
+                onChange={e => setDueDate(e.target.value)}
+                className="w-full rounded-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 dark:text-white px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+              />
+            </div>
+          )}
 
           <button
             type="submit"

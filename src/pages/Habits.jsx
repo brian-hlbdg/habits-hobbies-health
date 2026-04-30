@@ -38,15 +38,22 @@ const CATEGORIES = [
   { value: 'story',     label: 'Story' },
 ]
 
+const FREQUENCIES = [
+  { value: 'daily',   label: 'Daily' },
+  { value: 'weekly',  label: 'Weekly' },
+  { value: 'monthly', label: 'Monthly' },
+]
+
 function AddHabitForm({ onAdd, onClose }) {
-  const [title, setTitle]     = useState('')
-  const [category, setCategory] = useState('daily')
-  const [context, setContext]   = useState('home')
+  const [title, setTitle]         = useState('')
+  const [category, setCategory]   = useState('daily')
+  const [context, setContext]     = useState('home')
+  const [frequency, setFrequency] = useState('daily')
 
   function handleSubmit(e) {
     e.preventDefault()
     if (!title.trim()) return
-    onAdd({ title: title.trim(), category, context })
+    onAdd({ title: title.trim(), category, context, frequency })
     onClose()
   }
 
@@ -103,6 +110,26 @@ function AddHabitForm({ onAdd, onClose }) {
               ))}
             </div>
           </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-500 dark:text-zinc-400 mb-1">Frequency</label>
+            <div className="flex gap-2">
+              {FREQUENCIES.map(({ value, label }) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setFrequency(value)}
+                  className={`flex-1 py-2 rounded-lg text-sm font-medium border transition ${
+                    frequency === value
+                      ? 'bg-indigo-600 text-white border-indigo-600'
+                      : 'bg-white dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 border-gray-200 dark:border-zinc-700 hover:border-indigo-300'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <button
             type="submit"
             disabled={!title.trim()}
