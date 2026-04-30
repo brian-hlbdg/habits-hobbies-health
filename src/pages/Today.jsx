@@ -3,6 +3,7 @@ import { useItems } from '../hooks/useItems'
 import { useCarryForward } from '../hooks/useCarryForward'
 import { today } from '../lib/supabase'
 import Header from '../components/layout/Header'
+import Dashboard from '../components/layout/Dashboard'
 import CategorySection from '../components/habits/CategorySection'
 import NoteModal from '../components/ui/NoteModal'
 import DueDateModal from '../components/ui/DueDateModal'
@@ -20,18 +21,25 @@ export default function Today() {
   const [noteItem, setNoteItem]       = useState(null)
   const [dueDateItem, setDueDateItem] = useState(null)
   const [showAdd, setShowAdd]         = useState(false)
+  const [context, setContext]         = useState('all')
 
   const dateLabel = new Date().toLocaleDateString('en-US', {
     weekday: 'long', month: 'long', day: 'numeric'
   })
 
-  const completed = items.filter(i => i.completed).length
-  const total     = items.length
+  // Filter by context then group by category
+  const visibleItems = useMemo(() =>
+    context === 'all' ? items : items.filter(i => i.context === context),
+    [items, context]
+  )
+
+  const completed = visibleItems.filter(i => i.completed).length
+  const total     = visibleItems.length
 
   // Group by category, sorted by preferred order
   const groups = useMemo(() => {
     const map = {}
-    items.forEach(item => {
+    visibleItems.forEach(item => {
       if (!map[item.category]) map[item.category] = []
       map[item.category].push(item)
     })
@@ -41,10 +49,11 @@ export default function Today() {
       return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi)
     })
     return sorted.map(cat => ({ category: cat, items: map[cat] }))
-  }, [items])
+  }, [visibleItems])
 
   return (
-    <div className="max-w-xl mx-auto px-4">
+    <div className="max-w-xl mx-auto">
+      <Dashboard activeContext={context} onContextChange={setContext} />
       <Header title="Today" subtitle={dateLabel} completed={completed} total={total} />
 
       {loading ? (
