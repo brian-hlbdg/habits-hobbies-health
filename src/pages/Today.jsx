@@ -2,13 +2,13 @@ import { useState, useMemo } from 'react'
 import { useItems } from '../hooks/useItems'
 import { useCarryForward } from '../hooks/useCarryForward'
 import { useHabitCelebrations } from '../hooks/useHabitCelebrations'
+import { useOverdueTasks } from '../hooks/useOverdueTasks'
 import { today } from '../lib/supabase'
 import Header from '../components/layout/Header'
 import Dashboard from '../components/layout/Dashboard'
 import CategorySection from '../components/habits/CategorySection'
 import NoteModal from '../components/ui/NoteModal'
 import DueDateModal from '../components/ui/DueDateModal'
-import AddItemModal from '../components/ui/AddItemModal'
 
 const MILESTONE_LABELS = {
   7:   '7-day streak',
@@ -61,12 +61,12 @@ export default function Today() {
   useCarryForward()
 
   const celebrations = useHabitCelebrations()
+  const { overdue, complete: completeOverdue } = useOverdueTasks()
   const date = today()
-  const { items, loading, toggle, saveNote, addItem, updateDueDate } = useItems('daily', date)
+  const { items, loading, toggle, saveNote, updateDueDate } = useItems('daily', date)
 
   const [noteItem, setNoteItem]       = useState(null)
   const [dueDateItem, setDueDateItem] = useState(null)
-  const [showAdd, setShowAdd]         = useState(false)
   const [context, setContext]         = useState('all')
 
   const dateLabel = new Date().toLocaleDateString('en-US', {
@@ -109,15 +109,32 @@ export default function Today() {
         </div>
       ) : (
         <>
-          {groups.length === 0 && (
+          {/* Overdue tasks from Week/Month/Year */}
+          {overdue.length > 0 && (
+            <div className="px-4 mb-2">
+              <p className="text-xs font-semibold uppercase tracking-wide text-red-400 dark:text-red-500 mb-2">Overdue</p>
+              <div className="space-y-2">
+                {overdue.map(item => (
+                  <div key={item.id} className="flex items-center gap-3 px-4 py-3 bg-white dark:bg-zinc-900 rounded-xl border border-red-100 dark:border-zinc-700">
+                    <button
+                      onClick={() => completeOverdue(item.id)}
+                      className="w-5 h-5 rounded-full border-2 border-red-300 dark:border-red-700 hover:border-red-500 shrink-0 transition"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-gray-800 dark:text-zinc-200 truncate">{item.title}</p>
+                      <p className="text-xs text-red-400 dark:text-red-500 mt-0.5">
+                        Due {new Date(item.due_date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} · {item.view}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {groups.length === 0 && overdue.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-gray-400 dark:text-zinc-500 text-sm">No habits yet.</p>
-              <button
-                onClick={() => setShowAdd(true)}
-                className="mt-3 text-indigo-600 text-sm font-medium hover:underline"
-              >
-                Add your first item
-              </button>
+              <p className="text-gray-400 dark:text-zinc-500 text-sm">Nothing on the list.</p>
             </div>
           )}
 
@@ -134,24 +151,12 @@ export default function Today() {
         </>
       )}
 
-      {/* FAB — Add item */}
-      <button
-        onClick={() => setShowAdd(true)}
-        className="fixed bottom-24 right-5 md:bottom-8 md:right-8 w-14 h-14 rounded-full bg-indigo-600 text-white shadow-lg flex items-center justify-center hover:bg-indigo-700 transition text-2xl leading-none"
-        aria-label="Add item"
-      >
-        +
-      </button>
-
       {/* Modals */}
       {noteItem && (
         <NoteModal item={noteItem} onSave={saveNote} onClose={() => setNoteItem(null)} />
       )}
       {dueDateItem && (
         <DueDateModal item={dueDateItem} onSave={updateDueDate} onClose={() => setDueDateItem(null)} />
-      )}
-      {showAdd && (
-        <AddItemModal view="daily" onAdd={addItem} onClose={() => setShowAdd(false)} />
       )}
     </div>
   )

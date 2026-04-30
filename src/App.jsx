@@ -11,6 +11,7 @@ import Ideas from './pages/Ideas'
 import Projects from './pages/Projects'
 import Habits from './pages/Habits'
 import NavBar from './components/layout/NavBar'
+import QuickCaptureModal from './components/ui/QuickCaptureModal'
 
 function SwipeDots({ current, total }) {
   return (
@@ -31,6 +32,7 @@ function SwipeDots({ current, total }) {
 
 function AppLayout() {
   const { onTouchStart, onTouchEnd, currentIndex, total } = useSwipeNavigation()
+  const [showCapture, setShowCapture] = useState(false)
 
   return (
     <div className="flex flex-col h-full md:flex-row">
@@ -54,6 +56,17 @@ function AppLayout() {
           <Route path="*"         element={<Navigate to="/" replace />} />
         </Routes>
       </main>
+
+      {/* Global quick capture FAB */}
+      <button
+        onClick={() => setShowCapture(true)}
+        className="fixed bottom-24 right-5 md:bottom-8 md:right-8 w-14 h-14 rounded-full bg-indigo-600 text-white shadow-lg flex items-center justify-center hover:bg-indigo-700 active:scale-95 transition text-2xl leading-none z-40"
+        aria-label="Quick capture"
+      >
+        +
+      </button>
+
+      {showCapture && <QuickCaptureModal onClose={() => setShowCapture(false)} />}
     </div>
   )
 }

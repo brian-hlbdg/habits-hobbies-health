@@ -41,7 +41,7 @@ function TrashIcon({ className }) {
   )
 }
 
-function IdeaCard({ idea, projects, onAssign, onPromote, onPromoteToProject, onDelete }) {
+function IdeaCard({ idea, projects, onAssign, onPromote, onPromoteToHabit, onPromoteToProject, onDelete }) {
   const [showPromote, setShowPromote] = useState(false)
 
   return (
@@ -99,6 +99,12 @@ function IdeaCard({ idea, projects, onAssign, onPromote, onPromoteToProject, onD
           >
             Task — adds to today's list
           </button>
+          <button
+            onClick={() => onPromoteToHabit(idea)}
+            className="w-full text-left px-3 py-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-950 text-xs text-indigo-700 dark:text-indigo-300 transition"
+          >
+            Habit — track it daily on the Habits page
+          </button>
           {idea.context === 'home' && projects.length > 0 && (
             <div className="space-y-1">
               <p className="text-xs text-gray-400 dark:text-zinc-500 pl-1">Or attach to a project:</p>
@@ -120,7 +126,7 @@ function IdeaCard({ idea, projects, onAssign, onPromote, onPromoteToProject, onD
 }
 
 export default function Ideas() {
-  const { ideas, loading, addIdea, assignContext, promoteToTask, promoteToProjectTask, deleteIdea } = useIdeas()
+  const { ideas, loading, addIdea, assignContext, promoteToTask, promoteToHabit, promoteToProjectTask, deleteIdea } = useIdeas()
   const { projects } = useProjects()
   const [newIdea, setNewIdea] = useState('')
 
@@ -148,6 +154,7 @@ export default function Ideas() {
               projects={projects}
               onAssign={assignContext}
               onPromote={promoteToTask}
+              onPromoteToHabit={promoteToHabit}
               onPromoteToProject={promoteToProjectTask}
               onDelete={deleteIdea}
             />

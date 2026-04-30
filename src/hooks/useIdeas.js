@@ -76,10 +76,31 @@ export function useIdeas() {
     }
   }
 
+  // Promote idea → habit
+  async function promoteToHabit(idea) {
+    const { data: { user } } = await supabase.auth.getUser()
+    const { error } = await supabase.from('items').insert({
+      user_id: user.id,
+      title: idea.title,
+      category: 'daily',
+      context: idea.context || 'home',
+      type: 'habit',
+      view: 'daily',
+      frequency: 'daily',
+      is_recurring: true,
+      active: true,
+      order_index: 9999,
+    })
+    if (!error) {
+      await supabase.from('ideas').delete().eq('id', idea.id)
+      setIdeas(prev => prev.filter(i => i.id !== idea.id))
+    }
+  }
+
   async function deleteIdea(ideaId) {
     await supabase.from('ideas').delete().eq('id', ideaId)
     setIdeas(prev => prev.filter(i => i.id !== ideaId))
   }
 
-  return { ideas, loading, addIdea, assignContext, promoteToTask, promoteToProjectTask, deleteIdea, reload: load }
+  return { ideas, loading, addIdea, assignContext, promoteToTask, promoteToHabit, promoteToProjectTask, deleteIdea, reload: load }
 }

@@ -5,7 +5,6 @@ import Header from '../components/layout/Header'
 import CategorySection from '../components/habits/CategorySection'
 import NoteModal from '../components/ui/NoteModal'
 import DueDateModal from '../components/ui/DueDateModal'
-import AddItemModal from '../components/ui/AddItemModal'
 
 function monthLabel() {
   return new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
@@ -17,7 +16,6 @@ export default function Monthly() {
 
   const [noteItem, setNoteItem]       = useState(null)
   const [dueDateItem, setDueDateItem] = useState(null)
-  const [showAdd, setShowAdd]         = useState(false)
 
   const completed = items.filter(i => i.completed).length
   const total     = items.length
@@ -59,17 +57,8 @@ export default function Monthly() {
         </>
       )}
 
-      <button
-        onClick={() => setShowAdd(true)}
-        className="fixed bottom-24 right-5 md:bottom-8 md:right-8 w-14 h-14 rounded-full bg-indigo-600 text-white shadow-lg flex items-center justify-center hover:bg-indigo-700 transition text-2xl leading-none"
-        aria-label="Add item"
-      >
-        +
-      </button>
-
       {noteItem    && <NoteModal item={noteItem} onSave={saveNote} onClose={() => setNoteItem(null)} />}
       {dueDateItem && <DueDateModal item={dueDateItem} onSave={updateDueDate} onClose={() => setDueDateItem(null)} />}
-      {showAdd     && <AddItemModal view="monthly" onAdd={addItem} onClose={() => setShowAdd(false)} />}
     </div>
   )
 }
