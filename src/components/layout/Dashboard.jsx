@@ -57,14 +57,20 @@ function ProgressRing({ completed, total, color }) {
   )
 }
 
-function ContextCard({ label, Icon, data, color, bg, iconColor }) {
+function ContextCard({ label, Icon, data, color, bg, iconColor, active, onClick }) {
   if (!data) return <div className={`flex-1 rounded-2xl ${bg} h-20 animate-pulse`} />
 
   const { total, completed, overdue } = data
   const pct = total > 0 ? Math.round((completed / total) * 100) : 0
 
   return (
-    <div className={`flex-1 rounded-2xl ${bg} px-4 py-3 flex items-center gap-3`}>
+    <button
+      onClick={onClick}
+      className={`flex-1 rounded-2xl ${bg} px-4 py-3 flex items-center gap-3 text-left transition ring-2 ${
+        active ? 'ring-current opacity-100' : 'ring-transparent opacity-80 hover:opacity-100'
+      }`}
+      style={{ '--tw-ring-color': color }}
+    >
       <div className="relative flex items-center justify-center">
         <ProgressRing completed={completed} total={total} color={color} />
         <span className="absolute text-[10px] font-bold text-gray-700">{pct}%</span>
@@ -79,7 +85,7 @@ function ContextCard({ label, Icon, data, color, bg, iconColor }) {
           <p className="text-xs text-red-500 font-medium">{overdue} overdue</p>
         )}
       </div>
-    </div>
+    </button>
   )
 }
 
@@ -96,6 +102,8 @@ export default function Dashboard({ activeContext, onContextChange }) {
           color="#4f46e5"
           bg="bg-indigo-50"
           iconColor="text-indigo-400"
+          active={activeContext === 'work'}
+          onClick={() => onContextChange(activeContext === 'work' ? 'all' : 'work')}
         />
         <ContextCard
           label="Home"
@@ -104,6 +112,8 @@ export default function Dashboard({ activeContext, onContextChange }) {
           color="#10b981"
           bg="bg-emerald-50"
           iconColor="text-emerald-400"
+          active={activeContext === 'home'}
+          onClick={() => onContextChange(activeContext === 'home' ? 'all' : 'home')}
         />
       </div>
 
