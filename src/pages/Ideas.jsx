@@ -45,13 +45,13 @@ function IdeaCard({ idea, projects, onAssign, onPromote, onPromoteToProject, onD
   const [showPromote, setShowPromote] = useState(false)
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm space-y-3">
+    <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 p-4 shadow-sm dark:shadow-gray-900 space-y-3">
       <div className="flex items-start justify-between gap-2">
         <div>
-          <p className="text-sm font-medium text-gray-900">{idea.title}</p>
-          {idea.note && <p className="text-xs text-gray-500 mt-0.5">{idea.note}</p>}
+          <p className="text-sm font-medium text-gray-900 dark:text-white">{idea.title}</p>
+          {idea.note && <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{idea.note}</p>}
         </div>
-        <button onClick={() => onDelete(idea.id)} className="text-gray-300 hover:text-red-400 transition shrink-0">
+        <button onClick={() => onDelete(idea.id)} className="text-gray-300 dark:text-gray-600 hover:text-red-400 transition shrink-0">
           <TrashIcon className="w-4 h-4" />
         </button>
       </div>
@@ -63,7 +63,7 @@ function IdeaCard({ idea, projects, onAssign, onPromote, onPromoteToProject, onD
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
             idea.context === 'work'
               ? 'bg-indigo-600 text-white border-indigo-600'
-              : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
+              : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-indigo-300'
           }`}
         >
           <BriefcaseIcon className="w-3.5 h-3.5" /> Work
@@ -73,7 +73,7 @@ function IdeaCard({ idea, projects, onAssign, onPromote, onPromoteToProject, onD
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
             idea.context === 'home'
               ? 'bg-emerald-600 text-white border-emerald-600'
-              : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-300'
+              : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-emerald-300'
           }`}
         >
           <HomeIcon className="w-3.5 h-3.5" /> Home
@@ -91,22 +91,22 @@ function IdeaCard({ idea, projects, onAssign, onPromote, onPromoteToProject, onD
 
       {/* Promote options */}
       {showPromote && idea.context && (
-        <div className="border-t border-gray-100 pt-3 space-y-2">
-          <p className="text-xs text-gray-500 font-medium">Promote to:</p>
+        <div className="border-t border-gray-100 dark:border-gray-700 pt-3 space-y-2">
+          <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Promote to:</p>
           <button
             onClick={() => onPromote(idea)}
-            className="w-full text-left px-3 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 text-xs text-gray-700 transition"
+            className="w-full text-left px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-xs text-gray-700 dark:text-gray-300 transition"
           >
             Task — adds to today's list
           </button>
           {idea.context === 'home' && projects.length > 0 && (
             <div className="space-y-1">
-              <p className="text-xs text-gray-400 pl-1">Or attach to a project:</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500 pl-1">Or attach to a project:</p>
               {projects.map(p => (
                 <button
                   key={p.id}
                   onClick={() => onPromoteToProject(idea, p.id)}
-                  className="w-full text-left px-3 py-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-xs text-emerald-800 transition"
+                  className="w-full text-left px-3 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-950 hover:bg-emerald-100 dark:hover:bg-emerald-900 text-xs text-emerald-800 dark:text-emerald-300 transition"
                 >
                   {p.title}
                 </button>
@@ -160,8 +160,8 @@ export default function Ideas() {
   return (
     <div className="max-w-xl mx-auto px-4 pt-6 pb-28">
       <div className="mb-5">
-        <h2 className="text-xl font-bold text-gray-900">Ideas</h2>
-        <p className="text-sm text-gray-500 mt-0.5">Capture first, sort later</p>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Ideas</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Capture first, sort later</p>
       </div>
 
       {/* Quick capture */}
@@ -171,7 +171,7 @@ export default function Ideas() {
           value={newIdea}
           onChange={e => setNewIdea(e.target.value)}
           placeholder="What's on your mind?"
-          className="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+          className="flex-1 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 px-4 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
         />
         <button
           type="submit"
@@ -187,7 +187,7 @@ export default function Ideas() {
           <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : ideas.length === 0 ? (
-        <p className="text-center text-sm text-gray-400 py-12">No ideas yet. Start capturing.</p>
+        <p className="text-center text-sm text-gray-400 dark:text-gray-500 py-12">No ideas yet. Start capturing.</p>
       ) : (
         <div className="space-y-6">
           <Group title="Inbox" items={unassigned} accent="text-gray-400" />

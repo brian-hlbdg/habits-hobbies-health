@@ -48,17 +48,17 @@ export default function Auth() {
   }
 
   return (
-    <div className="min-h-full flex items-center justify-center bg-[#fafafa] px-4">
+    <div className="min-h-full flex items-center justify-center bg-[#fafafa] dark:bg-gray-900 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Habits</h1>
-          <p className="mt-2 text-sm text-gray-500">Your daily tracker</p>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Habits</h1>
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Your daily tracker</p>
         </div>
 
         {step === 'email' ? (
           <form onSubmit={handleEmailSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
               <input
                 type="email"
                 required
@@ -66,7 +66,7 @@ export default function Auth() {
                 value={email}
                 onChange={e => { setEmail(e.target.value); setError(null) }}
                 placeholder="you@example.com"
-                className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition"
+                className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition"
               />
             </div>
             {error && <p className="text-xs text-red-600">{error}</p>}
@@ -81,9 +81,9 @@ export default function Auth() {
         ) : (
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <div className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50 px-4 py-3">
-                <span className="text-sm text-gray-700">{email}</span>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+              <div className="flex items-center justify-between rounded-lg border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-4 py-3">
+                <span className="text-sm text-gray-700 dark:text-gray-300">{email}</span>
                 <button
                   type="button"
                   onClick={() => { setStep('email'); setPassword(''); setError(null) }}
@@ -94,7 +94,7 @@ export default function Auth() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
               <input
                 type="password"
                 required
@@ -102,7 +102,7 @@ export default function Auth() {
                 value={password}
                 onChange={e => { setPassword(e.target.value); setError(null) }}
                 placeholder="Enter your password"
-                className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition"
+                className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition"
               />
             </div>
             {error && <p className="text-xs text-red-600">{error}</p>}

@@ -64,11 +64,11 @@ export default function AddItemModal({ view, onAdd, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center">
-      <div className="absolute inset-0 bg-black/30" onClick={onClose} />
-      <div className="relative w-full max-w-lg bg-white rounded-t-2xl md:rounded-2xl p-5 slide-up shadow-xl">
+      <div className="absolute inset-0 bg-black/30 dark:bg-black/50" onClick={onClose} />
+      <div className="relative w-full max-w-lg bg-white dark:bg-gray-900 rounded-t-2xl md:rounded-2xl p-5 slide-up shadow-xl dark:shadow-gray-900">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-800">Add item</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <h3 className="font-semibold text-gray-800 dark:text-gray-100">Add item</h3>
+          <button onClick={onClose} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300">
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
             </svg>
@@ -83,16 +83,16 @@ export default function AddItemModal({ view, onAdd, onClose }) {
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder="What do you want to track?"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+              className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">Category</label>
+            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Category</label>
             <select
               value={category}
               onChange={e => handleCategoryChange(e.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 bg-white"
+              className="w-full rounded-lg border border-gray-200 dark:border-gray-700 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 bg-white dark:bg-gray-800 dark:text-white"
             >
               {CATEGORIES.map(c => (
                 <option key={c.value} value={c.value}>{c.label}</option>
@@ -101,7 +101,7 @@ export default function AddItemModal({ view, onAdd, onClose }) {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">Context</label>
+            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Context</label>
             <div className="flex gap-2">
               {[
                 { value: 'work', label: 'Work', Icon: BriefcaseIcon },
@@ -112,7 +112,7 @@ export default function AddItemModal({ view, onAdd, onClose }) {
                   type="button"
                   onClick={() => setContext(value)}
                   className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium border transition ${
-                    context === value ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
+                    context === value ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-indigo-300'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" /> {label}
@@ -126,7 +126,7 @@ export default function AddItemModal({ view, onAdd, onClose }) {
               type="button"
               onClick={() => setIsRecurring(true)}
               className={`flex-1 py-2 rounded-lg text-sm font-medium border transition ${
-                isRecurring ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
+                isRecurring ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-indigo-300'
               }`}
             >
               Recurring habit
@@ -135,7 +135,7 @@ export default function AddItemModal({ view, onAdd, onClose }) {
               type="button"
               onClick={() => setIsRecurring(false)}
               className={`flex-1 py-2 rounded-lg text-sm font-medium border transition ${
-                !isRecurring ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
+                !isRecurring ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-indigo-300'
               }`}
             >
               Planned task
@@ -144,12 +144,12 @@ export default function AddItemModal({ view, onAdd, onClose }) {
 
           {!isRecurring && (
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Due date (optional)</label>
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Due date (optional)</label>
               <input
                 type="date"
                 value={dueDate}
                 onChange={e => setDueDate(e.target.value)}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white px-3 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
               />
             </div>
           )}
