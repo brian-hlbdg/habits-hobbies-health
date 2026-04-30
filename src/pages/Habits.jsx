@@ -168,6 +168,7 @@ export default function Habits() {
               habitTitle={h.title}
               completed={h.completed}
               onToggle={toggle}
+              onRemove={removeHabit}
             />
           ))}
         </div>

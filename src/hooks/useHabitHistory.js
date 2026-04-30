@@ -8,11 +8,13 @@ const DAYS = 84 // 12 weeks
  * Also returns the current streak and all earned milestones.
  */
 export function useHabitHistory(habitId) {
-  const [grid, setGrid]           = useState([])   // array of { date, completed, col, row }
-  const [streak, setStreak]       = useState(0)
-  const [bestStreak, setBestStreak] = useState(0)
-  const [milestones, setMilestones] = useState([]) // earned milestone thresholds
-  const [loading, setLoading]     = useState(true)
+  const [grid, setGrid]                           = useState([])
+  const [streak, setStreak]                       = useState(0)
+  const [bestStreak, setBestStreak]               = useState(0)
+  const [milestones, setMilestones]               = useState([])
+  const [newMilestone, setNewMilestone]           = useState(null)  // threshold hit today
+  const [daysSinceLastCompletion, setDaysSince]   = useState(null)
+  const [loading, setLoading]                     = useState(true)
 
   useEffect(() => {
     if (!habitId) return
@@ -85,10 +87,27 @@ export function useHabitHistory(habitId) {
       const THRESHOLDS = [7, 21, 30, 66, 100, 365]
       setMilestones(THRESHOLDS.filter(t => best >= t))
 
+      // New milestone: today's streak exactly equals a threshold (just achieved today)
+      setNewMilestone(THRESHOLDS.find(t => cur === t) ?? null)
+
+      // Days since last completion
+      const allDates = Object.entries(compMap)
+        .filter(([, v]) => v)
+        .map(([k]) => k)
+        .sort()
+      const lastDate = allDates.at(-1)
+      if (lastDate) {
+        const last = new Date(lastDate)
+        const diff = Math.floor((today - last) / 86400000)
+        setDaysSince(diff)
+      } else {
+        setDaysSince(null) // never completed
+      }
+
       setLoading(false)
     }
     load()
   }, [habitId])
 
-  return { grid, streak, bestStreak, milestones, loading }
+  return { grid, streak, bestStreak, milestones, newMilestone, daysSinceLastCompletion, loading }
 }
