@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
-const ROUTES = ['/', '/weekly', '/monthly', '/yearly']
+const ROUTES = ['/', '/weekly', '/monthly', '/yearly'] // swipeable task views
 const MIN_X  = 50  // min horizontal px to count as swipe
 const MAX_Y  = 80  // max vertical px before we consider it a scroll
 

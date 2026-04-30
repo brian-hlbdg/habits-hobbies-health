@@ -9,6 +9,7 @@ import Monthly from './pages/Monthly'
 import Yearly from './pages/Yearly'
 import Ideas from './pages/Ideas'
 import Projects from './pages/Projects'
+import Habits from './pages/Habits'
 import NavBar from './components/layout/NavBar'
 
 function SwipeDots({ current, total }) {
@@ -47,6 +48,7 @@ function AppLayout() {
           <Route path="/weekly"   element={<Weekly />} />
           <Route path="/monthly"  element={<Monthly />} />
           <Route path="/yearly"   element={<Yearly />} />
+          <Route path="/habits"   element={<Habits />} />
           <Route path="/ideas"    element={<Ideas />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="*"         element={<Navigate to="/" replace />} />

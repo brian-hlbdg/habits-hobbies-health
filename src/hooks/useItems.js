@@ -5,7 +5,8 @@ import { supabase, today } from '../lib/supabase'
  * Fetch all active items for a given view, plus today's completions.
  * Returns items merged with their completion state for `date`.
  */
-export function useItems(view, date = today()) {
+// mode: 'tasks' = is_recurring false, 'habits' = is_recurring true, null = all
+export function useItems(view, date = today(), mode = 'tasks') {
   const [items, setItems]     = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState(null)
@@ -18,13 +19,18 @@ export function useItems(view, date = today()) {
     if (!user) return
 
     // Fetch items for this view
-    const { data: itemRows, error: itemErr } = await supabase
+    let query = supabase
       .from('items')
       .select('*')
       .eq('user_id', user.id)
       .eq('view', view)
       .eq('active', true)
       .order('order_index')
+
+    if (mode === 'tasks')  query = query.eq('is_recurring', false)
+    if (mode === 'habits') query = query.eq('is_recurring', true)
+
+    const { data: itemRows, error: itemErr } = await query
 
     if (itemErr) { setError(itemErr.message); setLoading(false); return }
 
