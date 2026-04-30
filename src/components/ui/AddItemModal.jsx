@@ -1,5 +1,24 @@
 import { useState } from 'react'
 
+function BriefcaseIcon({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="7" width="20" height="14" rx="2" />
+      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+      <path d="M2 12h20" />
+    </svg>
+  )
+}
+
+function HomeIcon({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <polyline points="9 22 9 12 15 12 15 22" />
+    </svg>
+  )
+}
+
 const CATEGORIES = [
   { value: 'work',      label: 'Work' },
   { value: 'todo',      label: 'To Do' },
@@ -84,16 +103,19 @@ export default function AddItemModal({ view, onAdd, onClose }) {
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Context</label>
             <div className="flex gap-2">
-              {['work', 'home'].map(ctx => (
+              {[
+                { value: 'work', label: 'Work', Icon: BriefcaseIcon },
+                { value: 'home', label: 'Home', Icon: HomeIcon },
+              ].map(({ value, label, Icon }) => (
                 <button
-                  key={ctx}
+                  key={value}
                   type="button"
-                  onClick={() => setContext(ctx)}
-                  className={`flex-1 py-2 rounded-lg text-sm font-medium border transition capitalize ${
-                    context === ctx ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
+                  onClick={() => setContext(value)}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium border transition ${
+                    context === value ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
                   }`}
                 >
-                  {ctx === 'work' ? '💼 Work' : '🏠 Home'}
+                  <Icon className="w-3.5 h-3.5" /> {label}
                 </button>
               ))}
             </div>
