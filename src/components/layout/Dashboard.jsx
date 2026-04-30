@@ -1,4 +1,17 @@
+import { Link, useNavigate } from 'react-router-dom'
 import { useDashboard } from '../../hooks/useDashboard'
+
+function ProjectsLink({ count }) {
+  return (
+    <Link
+      to="/projects"
+      onClick={e => e.stopPropagation()}
+      className="text-xs text-emerald-500 font-medium underline underline-offset-2 hover:text-emerald-700"
+    >
+      {count} project{count !== 1 ? 's' : ''}
+    </Link>
+  )
+}
 
 function BriefcaseIcon({ className }) {
   return (
@@ -89,7 +102,7 @@ function ContextCard({ label, Icon, data, color, bg, iconColor, active, onClick 
             <p className="text-xs text-indigo-400 font-medium">{data.ideas} ideas</p>
           )}
           {data.projects > 0 && (
-            <p className="text-xs text-emerald-500 font-medium">{data.projects} projects</p>
+            <ProjectsLink count={data.projects} />
           )}
         </div>
       </div>
@@ -99,6 +112,7 @@ function ContextCard({ label, Icon, data, color, bg, iconColor, active, onClick 
 
 export default function Dashboard({ activeContext, onContextChange }) {
   const { summary, loading } = useDashboard()
+  const navigate = useNavigate()
 
   return (
     <div className="px-4 pt-5 pb-3 space-y-3">
