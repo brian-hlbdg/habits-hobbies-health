@@ -40,7 +40,7 @@ export default function HabitItem({ item, onToggle, onNoteClick, onDueDateClick 
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className={`text-sm leading-snug ${item.completed ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-800 dark:text-gray-100'}`}>
+          <span className={`text-sm leading-snug ${item.completed ? 'line-through text-gray-400 dark:text-zinc-500' : 'text-gray-800 dark:text-zinc-100'}`}>
             {item.title}
           </span>
 
@@ -54,7 +54,7 @@ export default function HabitItem({ item, onToggle, onNoteClick, onDueDateClick 
             <button
               onClick={() => onDueDateClick?.(item)}
               className={`text-xs px-1.5 py-0.5 rounded transition ${
-                urgency ? urgencyTextClasses[urgency] : 'text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700'
+                urgency ? urgencyTextClasses[urgency] : 'text-gray-500 dark:text-zinc-400 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700'
               }`}
             >
               {formatDate(item.due_date)}

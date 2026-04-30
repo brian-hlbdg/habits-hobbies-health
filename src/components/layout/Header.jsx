@@ -11,7 +11,7 @@ export default function Header({ title, subtitle, completed, total }) {
     <div className="flex items-center justify-between px-4 pt-6 pb-4">
       <div>
         <h2 className="text-xl font-bold text-gray-900 dark:text-white">{title}</h2>
-        {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{subtitle}</p>}
+        {subtitle && <p className="text-sm text-gray-500 dark:text-zinc-400 mt-0.5">{subtitle}</p>}
       </div>
       {total > 0 && (
         <div className="relative flex items-center justify-center">
@@ -26,7 +26,7 @@ export default function Header({ title, subtitle, completed, total }) {
               style={{ transition: 'stroke-dashoffset 0.4s ease' }}
             />
           </svg>
-          <span className="absolute text-xs font-semibold text-gray-700 dark:text-gray-300">{pct}%</span>
+          <span className="absolute text-xs font-semibold text-gray-700 dark:text-zinc-300">{pct}%</span>
         </div>
       )}
     </div>

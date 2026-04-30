@@ -64,7 +64,7 @@ export default function Today() {
         <>
           {groups.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-gray-400 dark:text-gray-500 text-sm">No habits yet.</p>
+              <p className="text-gray-400 dark:text-zinc-500 text-sm">No habits yet.</p>
               <button
                 onClick={() => setShowAdd(true)}
                 className="mt-3 text-indigo-600 text-sm font-medium hover:underline"

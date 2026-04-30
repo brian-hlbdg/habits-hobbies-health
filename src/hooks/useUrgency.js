@@ -34,13 +34,13 @@ export const urgencyItemClasses = {
 /** Tailwind classes per urgency level, applied to the category card */
 export const urgencyCategoryClasses = {
   warning: '',
-  urgent:  'bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800',
-  overdue: 'bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800',
+  urgent:  'bg-red-50 dark:bg-zinc-900 border-red-200 dark:border-red-900',
+  overdue: 'bg-red-50 dark:bg-zinc-900 border-red-200 dark:border-red-900',
 }
 
 /** Text color for due date chip */
 export const urgencyTextClasses = {
-  warning: 'text-amber-600 bg-amber-50 dark:bg-amber-950 dark:text-amber-400',
-  urgent:  'text-red-600 bg-red-50 dark:bg-red-950 dark:text-red-400',
-  overdue: 'text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-950 font-semibold',
+  warning: 'text-amber-600 bg-amber-50 dark:bg-zinc-800 dark:text-amber-400',
+  urgent:  'text-red-600 bg-red-50 dark:bg-zinc-800 dark:text-red-400',
+  overdue: 'text-red-700 dark:text-red-400 bg-red-100 dark:bg-zinc-800 font-semibold',
 }

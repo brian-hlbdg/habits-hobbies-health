@@ -32,7 +32,7 @@ export default function CategorySection({ category, items, onToggle, onNoteClick
 
   const cardClass = [
     'rounded-xl border mb-3 overflow-hidden transition-colors',
-    catUrgency ? urgencyCategoryClasses[catUrgency] : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700',
+    catUrgency ? urgencyCategoryClasses[catUrgency] : 'bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800',
   ].join(' ')
 
   return (
@@ -43,13 +43,13 @@ export default function CategorySection({ category, items, onToggle, onNoteClick
         className="w-full flex items-center justify-between px-4 py-3 text-left"
       >
         <div className="flex-1">
-          <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+          <span className="text-sm font-semibold text-gray-700 dark:text-zinc-300 uppercase tracking-wide">
             {CATEGORY_LABELS[category] || category}
           </span>
           <ProgressBar completed={completed} total={total} />
         </div>
         <svg
-          className={`w-4 h-4 text-gray-400 dark:text-gray-500 ml-3 flex-shrink-0 transition-transform ${open ? '' : '-rotate-90'}`}
+          className={`w-4 h-4 text-gray-400 dark:text-zinc-500 ml-3 flex-shrink-0 transition-transform ${open ? '' : '-rotate-90'}`}
           viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}
         >
           <polyline points="6 9 12 15 18 9" />
@@ -69,7 +69,7 @@ export default function CategorySection({ category, items, onToggle, onNoteClick
             />
           ))}
           {items.length === 0 && (
-            <p className="text-sm text-gray-400 dark:text-gray-500 py-2">No items yet</p>
+            <p className="text-sm text-gray-400 dark:text-zinc-500 py-2">No items yet</p>
           )}
         </div>
       )}

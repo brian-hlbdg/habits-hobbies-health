@@ -22,10 +22,11 @@ html, body, #root {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #111827;
-    --color-text: #f9fafb;
-    --color-border: #374151;
-    --color-muted: #9ca3af;
+    --color-bg: #09090b;
+    --color-accent: #6366f1;
+    --color-border: #1f2937;
+    --color-text: #f4f4f5;
+    --color-muted: #71717a;
   }
 }
 

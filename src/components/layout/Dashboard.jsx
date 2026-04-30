@@ -87,12 +87,12 @@ function TaskCard({ label, Icon, data, color, bg, iconColor, active, onClick }) 
     >
       <div className="relative flex items-center justify-center">
         <ProgressRing completed={completed} total={total} color={color} />
-        <span className="absolute text-[10px] font-bold text-gray-700 dark:text-gray-300">{pct}%</span>
+        <span className="absolute text-[10px] font-bold text-gray-700 dark:text-zinc-300">{pct}%</span>
       </div>
       <div className="min-w-0">
         <div className="flex items-center gap-1.5">
           <Icon className={`w-3.5 h-3.5 ${iconColor}`} />
-          <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">{label}</p>
+          <p className="text-xs font-semibold text-gray-500 dark:text-zinc-400 uppercase tracking-wide">{label}</p>
         </div>
         <p className="text-sm font-bold text-gray-900 dark:text-white mt-0.5">{completed}/{total} done</p>
         {overdue > 0 && (
@@ -106,23 +106,23 @@ function TaskCard({ label, Icon, data, color, bg, iconColor, active, onClick }) 
 // ─── Ideas card ───────────────────────────────────────────────────────────────
 
 function IdeasCard({ data }) {
-  if (!data) return <div className="flex-1 rounded-2xl bg-amber-50 dark:bg-amber-950 h-16 animate-pulse" />
+  if (!data) return <div className="flex-1 rounded-2xl bg-amber-50 dark:bg-zinc-900 h-16 animate-pulse" />
   const { total, inbox, work, home } = data
 
   return (
     <Link
       to="/ideas"
-      className="flex-1 rounded-2xl bg-amber-50 dark:bg-amber-950 px-4 py-3 flex items-center gap-3 hover:opacity-90 transition"
+      className="flex-1 rounded-2xl bg-amber-50 dark:bg-zinc-900 px-4 py-3 flex items-center gap-3 hover:opacity-90 transition"
     >
       <LightbulbIcon className="w-5 h-5 text-amber-400 shrink-0" />
       <div className="min-w-0">
-        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Ideas</p>
+        <p className="text-xs font-semibold text-gray-500 dark:text-zinc-400 uppercase tracking-wide">Ideas</p>
         <p className="text-sm font-bold text-gray-900 dark:text-white mt-0.5">{total} in queue</p>
         {inbox > 0 && (
           <p className="text-xs text-amber-600 font-medium">{inbox} unsorted</p>
         )}
         {total === 0 && (
-          <p className="text-xs text-gray-400 dark:text-gray-500">Tap to capture</p>
+          <p className="text-xs text-gray-400 dark:text-zinc-500">Tap to capture</p>
         )}
       </div>
     </Link>
@@ -132,17 +132,17 @@ function IdeasCard({ data }) {
 // ─── Projects card ────────────────────────────────────────────────────────────
 
 function ProjectsCard({ data }) {
-  if (!data) return <div className="flex-1 rounded-2xl bg-emerald-50 dark:bg-emerald-950 h-16 animate-pulse" />
+  if (!data) return <div className="flex-1 rounded-2xl bg-emerald-50 dark:bg-zinc-900 h-16 animate-pulse" />
   const { active, overdue } = data
 
   return (
     <Link
       to="/projects"
-      className="flex-1 rounded-2xl bg-emerald-50 dark:bg-emerald-950 px-4 py-3 flex items-center gap-3 hover:opacity-90 transition"
+      className="flex-1 rounded-2xl bg-emerald-50 dark:bg-zinc-900 px-4 py-3 flex items-center gap-3 hover:opacity-90 transition"
     >
       <FolderIcon className="w-5 h-5 text-emerald-400 shrink-0" />
       <div className="min-w-0">
-        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Projects</p>
+        <p className="text-xs font-semibold text-gray-500 dark:text-zinc-400 uppercase tracking-wide">Projects</p>
         <p className="text-sm font-bold text-gray-900 dark:text-white mt-0.5">
           {active} active
         </p>
@@ -150,7 +150,7 @@ function ProjectsCard({ data }) {
           <p className="text-xs text-red-500 font-medium">{overdue} with overdue tasks</p>
         )}
         {active === 0 && (
-          <p className="text-xs text-gray-400 dark:text-gray-500">Tap to create one</p>
+          <p className="text-xs text-gray-400 dark:text-zinc-500">Tap to create one</p>
         )}
       </div>
     </Link>
@@ -179,7 +179,7 @@ export default function Dashboard({ activeContext, onContextChange }) {
           Icon={BriefcaseIcon}
           data={loading ? null : summary?.work}
           color="#4f46e5"
-          bg="bg-indigo-50 dark:bg-indigo-950"
+          bg="bg-indigo-50 dark:bg-zinc-900"
           iconColor="text-indigo-400"
           active={activeContext === 'work'}
           onClick={() => onContextChange(activeContext === 'work' ? 'all' : 'work')}
@@ -189,7 +189,7 @@ export default function Dashboard({ activeContext, onContextChange }) {
           Icon={HomeIcon}
           data={loading ? null : summary?.home}
           color="#10b981"
-          bg="bg-emerald-50 dark:bg-emerald-950"
+          bg="bg-emerald-50 dark:bg-zinc-900"
           iconColor="text-emerald-400"
           active={activeContext === 'home'}
           onClick={() => onContextChange(activeContext === 'home' ? 'all' : 'home')}
@@ -203,15 +203,15 @@ export default function Dashboard({ activeContext, onContextChange }) {
       </div>
 
       {/* Context toggle */}
-      <div className="flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1 gap-1">
+      <div className="flex rounded-xl bg-gray-100 dark:bg-zinc-900 p-1 gap-1">
         {CONTEXTS.map(({ value, label, Icon }) => (
           <button
             key={value}
             onClick={() => onContextChange(value)}
             className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-semibold transition ${
               activeContext === value
-                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm dark:shadow-gray-900'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
+                : 'text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200'
             }`}
           >
             <Icon className="w-3.5 h-3.5" />
