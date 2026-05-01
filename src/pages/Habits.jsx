@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useHabits } from '../hooks/useHabits'
 import HabitHeatmap from '../components/habits/HabitHeatmap'
+import EditHabitModal from '../components/ui/EditHabitModal'
 
 function PlusIcon({ className }) {
   return (
@@ -144,8 +145,9 @@ function AddHabitForm({ onAdd, onClose }) {
 }
 
 export default function Habits() {
-  const { habits, loading, toggle, addHabit, removeHabit } = useHabits()
-  const [showAdd, setShowAdd] = useState(false)
+  const { habits, loading, toggle, addHabit, removeHabit, updateHabit } = useHabits()
+  const [showAdd, setShowAdd]       = useState(false)
+  const [editHabit, setEditHabit]   = useState(null)
 
   const done  = habits.filter(h => h.completed).length
   const total = habits.length
@@ -169,6 +171,7 @@ export default function Habits() {
               completed={h.completed}
               onToggle={toggle}
               onRemove={removeHabit}
+              onEdit={() => setEditHabit(h)}
             />
           ))}
         </div>
@@ -226,7 +229,8 @@ export default function Habits() {
         </div>
       )}
 
-      {showAdd && <AddHabitForm onAdd={addHabit} onClose={() => setShowAdd(false)} />}
+      {showAdd   && <AddHabitForm onAdd={addHabit} onClose={() => setShowAdd(false)} />}
+      {editHabit && <EditHabitModal habit={editHabit} onSave={updateHabit} onClose={() => setEditHabit(null)} />}
     </div>
   )
 }

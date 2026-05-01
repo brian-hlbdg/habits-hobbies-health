@@ -62,7 +62,22 @@ export function useItems(view, date = today()) {
     const item = items.find(i => i.id === itemId)
     const newCompleted = !item.completed
 
-    // Optimistic update
+    // Non-recurring task completed → archive it so it doesn't reappear tomorrow
+    if (newCompleted && !item.is_recurring) {
+      setItems(prev => prev.filter(i => i.id !== itemId))
+      await supabase.from('completions').upsert({
+        item_id: itemId,
+        user_id: user.id,
+        log_date: date,
+        completed: true,
+        note: item.note || null,
+        carried_forward: item.carried_forward,
+      }, { onConflict: 'item_id,log_date' })
+      await supabase.from('items').update({ active: false }).eq('id', itemId)
+      return
+    }
+
+    // Recurring task: normal per-day toggle
     setItems(prev => prev.map(i =>
       i.id === itemId ? { ...i, completed: newCompleted } : i
     ))
@@ -127,5 +142,11 @@ export function useItems(view, date = today()) {
     setItems(prev => prev.map(i => i.id === itemId ? { ...i, due_date: due_date || null } : i))
   }
 
-  return { items, loading, error, toggle, saveNote, addItem, removeItem, updateDueDate, reload: load }
+  /** Update editable fields on a task */
+  async function updateItem(itemId, updates) {
+    const { error } = await supabase.from('items').update(updates).eq('id', itemId)
+    if (!error) setItems(prev => prev.map(i => i.id === itemId ? { ...i, ...updates } : i))
+  }
+
+  return { items, loading, error, toggle, saveNote, addItem, removeItem, updateDueDate, updateItem, reload: load }
 }

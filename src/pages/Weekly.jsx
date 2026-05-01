@@ -6,6 +6,7 @@ import Header from '../components/layout/Header'
 import CategorySection from '../components/habits/CategorySection'
 import NoteModal from '../components/ui/NoteModal'
 import DueDateModal from '../components/ui/DueDateModal'
+import EditTaskModal from '../components/ui/EditTaskModal'
 
 const VIEW_LABEL = { daily: 'Daily', weekly: 'Weekly', monthly: 'Monthly', yearly: 'Yearly' }
 
@@ -119,11 +120,12 @@ function weekLabel() {
 
 export default function Weekly() {
   const date = today()
-  const { items, loading, toggle, saveNote, updateDueDate } = useItems('weekly', date)
+  const { items, loading, toggle, saveNote, updateDueDate, updateItem } = useItems('weekly', date)
   const { habitStats, completedTasks, loading: reviewLoading } = useWeeklyReview()
 
   const [noteItem, setNoteItem]       = useState(null)
   const [dueDateItem, setDueDateItem] = useState(null)
+  const [editItem, setEditItem]       = useState(null)
 
   const completed = items.filter(i => i.completed).length
   const total     = items.length
@@ -160,6 +162,7 @@ export default function Weekly() {
               onToggle={toggle}
               onNoteClick={setNoteItem}
               onDueDateClick={setDueDateItem}
+              onEditClick={setEditItem}
             />
           ))}
         </>
@@ -169,6 +172,7 @@ export default function Weekly() {
 
       {noteItem    && <NoteModal item={noteItem} onSave={saveNote} onClose={() => setNoteItem(null)} />}
       {dueDateItem && <DueDateModal item={dueDateItem} onSave={updateDueDate} onClose={() => setDueDateItem(null)} />}
+      {editItem    && <EditTaskModal item={editItem} onSave={updateItem} onClose={() => setEditItem(null)} />}
     </div>
   )
 }

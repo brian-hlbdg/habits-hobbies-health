@@ -18,7 +18,7 @@ const CATEGORY_LABELS = {
   story:      'Story — Eternal Echoes',
 }
 
-export default function CategorySection({ category, items, onToggle, onNoteClick, onDueDateClick }) {
+export default function CategorySection({ category, items, onToggle, onNoteClick, onDueDateClick, onEditClick }) {
   const [open, setOpen] = useState(true)
 
   const completed = items.filter(i => i.completed).length
@@ -66,6 +66,7 @@ export default function CategorySection({ category, items, onToggle, onNoteClick
               onToggle={onToggle}
               onNoteClick={onNoteClick}
               onDueDateClick={onDueDateClick}
+              onEditClick={onEditClick}
             />
           ))}
           {items.length === 0 && (

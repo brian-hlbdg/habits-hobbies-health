@@ -5,6 +5,7 @@ import Header from '../components/layout/Header'
 import CategorySection from '../components/habits/CategorySection'
 import NoteModal from '../components/ui/NoteModal'
 import DueDateModal from '../components/ui/DueDateModal'
+import EditTaskModal from '../components/ui/EditTaskModal'
 
 function monthLabel() {
   return new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
@@ -12,10 +13,11 @@ function monthLabel() {
 
 export default function Monthly() {
   const date = today()
-  const { items, loading, toggle, saveNote, addItem, updateDueDate } = useItems('monthly', date)
+  const { items, loading, toggle, saveNote, updateDueDate, updateItem } = useItems('monthly', date)
 
   const [noteItem, setNoteItem]       = useState(null)
   const [dueDateItem, setDueDateItem] = useState(null)
+  const [editItem, setEditItem]       = useState(null)
 
   const completed = items.filter(i => i.completed).length
   const total     = items.length
@@ -52,6 +54,7 @@ export default function Monthly() {
               onToggle={toggle}
               onNoteClick={setNoteItem}
               onDueDateClick={setDueDateItem}
+              onEditClick={setEditItem}
             />
           ))}
         </>
@@ -59,6 +62,7 @@ export default function Monthly() {
 
       {noteItem    && <NoteModal item={noteItem} onSave={saveNote} onClose={() => setNoteItem(null)} />}
       {dueDateItem && <DueDateModal item={dueDateItem} onSave={updateDueDate} onClose={() => setDueDateItem(null)} />}
+      {editItem    && <EditTaskModal item={editItem} onSave={updateItem} onClose={() => setEditItem(null)} />}
     </div>
   )
 }

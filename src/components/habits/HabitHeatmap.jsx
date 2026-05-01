@@ -28,7 +28,7 @@ function cellColor(completed) {
   return 'bg-indigo-500 dark:bg-indigo-400'
 }
 
-export default function HabitHeatmap({ habitId, habitTitle, completed, onToggle, onRemove }) {
+export default function HabitHeatmap({ habitId, habitTitle, completed, onToggle, onRemove, onEdit }) {
   const { grid, streak, bestStreak, milestones, newMilestone, daysSinceLastCompletion, loading } = useHabitHistory(habitId)
 
   // Group cells into columns (weeks)
@@ -65,10 +65,24 @@ export default function HabitHeatmap({ habitId, habitTitle, completed, onToggle,
           </span>
         </div>
 
-        {/* Streak */}
-        <div className="text-right shrink-0">
-          <p className="text-lg font-bold text-indigo-600 dark:text-indigo-400 leading-none">{streak}</p>
-          <p className="text-[10px] text-gray-400 dark:text-zinc-500 leading-none mt-0.5">day streak</p>
+        {/* Streak + edit */}
+        <div className="flex items-center gap-2 shrink-0">
+          {onEdit && (
+            <button
+              onClick={onEdit}
+              className="p-1 text-gray-300 dark:text-zinc-600 hover:text-gray-500 dark:hover:text-zinc-400 transition"
+              aria-label="Edit habit"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+              </svg>
+            </button>
+          )}
+          <div className="text-right">
+            <p className="text-lg font-bold text-indigo-600 dark:text-indigo-400 leading-none">{streak}</p>
+            <p className="text-[10px] text-gray-400 dark:text-zinc-500 leading-none mt-0.5">day streak</p>
+          </div>
         </div>
       </div>
 

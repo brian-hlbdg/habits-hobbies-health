@@ -86,5 +86,10 @@ export function useHabits() {
     setHabits(prev => prev.filter(h => h.id !== habitId))
   }
 
-  return { habits, loading, toggle, addHabit, removeHabit, reload: load }
+  async function updateHabit(habitId, updates) {
+    const { error } = await supabase.from('items').update(updates).eq('id', habitId)
+    if (!error) setHabits(prev => prev.map(h => h.id === habitId ? { ...h, ...updates } : h))
+  }
+
+  return { habits, loading, toggle, addHabit, removeHabit, updateHabit, reload: load }
 }

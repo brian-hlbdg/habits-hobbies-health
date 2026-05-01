@@ -9,6 +9,7 @@ import Dashboard from '../components/layout/Dashboard'
 import CategorySection from '../components/habits/CategorySection'
 import NoteModal from '../components/ui/NoteModal'
 import DueDateModal from '../components/ui/DueDateModal'
+import EditTaskModal from '../components/ui/EditTaskModal'
 
 const MILESTONE_LABELS = {
   7:   '7-day streak',
@@ -63,10 +64,11 @@ export default function Today() {
   const celebrations = useHabitCelebrations()
   const { overdue, complete: completeOverdue } = useOverdueTasks()
   const date = today()
-  const { items, loading, toggle, saveNote, updateDueDate } = useItems('daily', date)
+  const { items, loading, toggle, saveNote, updateDueDate, updateItem } = useItems('daily', date)
 
   const [noteItem, setNoteItem]       = useState(null)
   const [dueDateItem, setDueDateItem] = useState(null)
+  const [editItem, setEditItem]       = useState(null)
   const [context, setContext]         = useState('all')
 
   const dateLabel = new Date().toLocaleDateString('en-US', {
@@ -146,18 +148,15 @@ export default function Today() {
               onToggle={toggle}
               onNoteClick={setNoteItem}
               onDueDateClick={setDueDateItem}
+              onEditClick={setEditItem}
             />
           ))}
         </>
       )}
 
-      {/* Modals */}
-      {noteItem && (
-        <NoteModal item={noteItem} onSave={saveNote} onClose={() => setNoteItem(null)} />
-      )}
-      {dueDateItem && (
-        <DueDateModal item={dueDateItem} onSave={updateDueDate} onClose={() => setDueDateItem(null)} />
-      )}
+      {noteItem    && <NoteModal item={noteItem} onSave={saveNote} onClose={() => setNoteItem(null)} />}
+      {dueDateItem && <DueDateModal item={dueDateItem} onSave={updateDueDate} onClose={() => setDueDateItem(null)} />}
+      {editItem    && <EditTaskModal item={editItem} onSave={updateItem} onClose={() => setEditItem(null)} />}
     </div>
   )
 }

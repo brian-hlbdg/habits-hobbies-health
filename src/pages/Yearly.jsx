@@ -5,13 +5,15 @@ import Header from '../components/layout/Header'
 import CategorySection from '../components/habits/CategorySection'
 import NoteModal from '../components/ui/NoteModal'
 import DueDateModal from '../components/ui/DueDateModal'
+import EditTaskModal from '../components/ui/EditTaskModal'
 
 export default function Yearly() {
   const date = today()
-  const { items, loading, toggle, saveNote, addItem, updateDueDate } = useItems('yearly', date)
+  const { items, loading, toggle, saveNote, updateDueDate, updateItem } = useItems('yearly', date)
 
   const [noteItem, setNoteItem]       = useState(null)
   const [dueDateItem, setDueDateItem] = useState(null)
+  const [editItem, setEditItem]       = useState(null)
 
   const year      = new Date().getFullYear()
   const completed = items.filter(i => i.completed).length
@@ -55,6 +57,7 @@ export default function Yearly() {
               onToggle={toggle}
               onNoteClick={setNoteItem}
               onDueDateClick={setDueDateItem}
+              onEditClick={setEditItem}
             />
           ))}
         </>
@@ -62,6 +65,7 @@ export default function Yearly() {
 
       {noteItem    && <NoteModal item={noteItem} onSave={saveNote} onClose={() => setNoteItem(null)} />}
       {dueDateItem && <DueDateModal item={dueDateItem} onSave={updateDueDate} onClose={() => setDueDateItem(null)} />}
+      {editItem    && <EditTaskModal item={editItem} onSave={updateItem} onClose={() => setEditItem(null)} />}
     </div>
   )
 }
